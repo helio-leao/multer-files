@@ -20,4 +20,10 @@ router.post("/toDisk", upload.single("picture"), async (req, res) => {
   res.sendFile(filePath);
 });
 
+router.post("/toBase64", upload.single("picture"), (req, res) => {
+  const { file } = req;
+  const base64 = file.buffer.toString("base64");
+  res.send(`data:${file.mimetype};base64,${base64}`);
+});
+
 export default router;

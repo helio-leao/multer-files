@@ -6,6 +6,6 @@ const app = express();
 app.use(express.json());
 
 app.use("/disk", diskStorageRouter);
-app.use("/memory", memoryStorageRouter);
+app.use("/memo", memoryStorageRouter);
 
 app.listen(3000, () => console.log("Server running..."));
