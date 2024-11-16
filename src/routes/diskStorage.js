@@ -2,13 +2,17 @@ import { Router } from "express";
 import fs from "fs/promises";
 import multer from "multer";
 import path from "path";
+import {
+  FILE_FIELD_NAME,
+  FILES_DIRECTORY,
+} from "../constants/fileConstants.js";
 
 const __dirname = path.resolve();
 const router = Router();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, `${FILES_DIRECTORY}/`);
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
@@ -16,14 +20,14 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-router.post("/", upload.single("picture"), (req, res) => {
+router.post("/", upload.single(FILE_FIELD_NAME), (req, res) => {
   const { file } = req;
   res.sendFile(path.join(__dirname, file.path));
 });
 
 router.post("/fromBase64", async (req, res) => {
   const { base64, name, mimeType } = req.body;
-  const filePath = path.join(__dirname, "uploads", name);
+  const filePath = path.join(__dirname, FILES_DIRECTORY, name);
   const buffer = Buffer.from(base64, "base64");
   await fs.writeFile(filePath, buffer);
   res.sendFile(filePath);
@@ -39,7 +43,7 @@ router.post("/fromUrl", async (req, res) => {
   let fileName = path.basename(parsedUrl.pathname) || "downloaded_file";
   fileName = fileName.split("?")[0];
 
-  const filePath = path.join(__dirname, "uploads", fileName);
+  const filePath = path.join(__dirname, FILES_DIRECTORY, fileName);
 
   await fs.writeFile(filePath, Buffer.from(buffer));
   res.sendFile(filePath);
