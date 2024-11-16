@@ -3,8 +3,8 @@ import fs from "fs/promises";
 import multer from "multer";
 import path from "path";
 
-const router = Router();
 const __dirname = path.resolve();
+const router = Router();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -26,6 +26,22 @@ router.post("/fromBase64", async (req, res) => {
   const filePath = path.join(__dirname, "uploads", name);
   const buffer = Buffer.from(base64, "base64");
   await fs.writeFile(filePath, buffer);
+  res.sendFile(filePath);
+});
+
+router.post("/fromUrl", async (req, res) => {
+  const { url } = req.body;
+
+  const response = await fetch(url);
+  const buffer = await response.arrayBuffer();
+
+  const parsedUrl = new URL(url);
+  let fileName = path.basename(parsedUrl.pathname) || "downloaded_file";
+  fileName = fileName.split("?")[0];
+
+  const filePath = path.join(__dirname, "uploads", fileName);
+
+  await fs.writeFile(filePath, Buffer.from(buffer));
   res.sendFile(filePath);
 });
 
