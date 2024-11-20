@@ -29,6 +29,7 @@ router.post("/fromBase64", async (req, res) => {
   const { base64, name, mimeType } = req.body;
   const filePath = path.join(__dirname, FILES_DIRECTORY, name);
   const buffer = Buffer.from(base64, "base64");
+  await fs.mkdir(FILES_DIRECTORY, { recursive: true });
   await fs.writeFile(filePath, buffer);
   res.sendFile(filePath);
 });
@@ -45,6 +46,7 @@ router.post("/fromUrl", async (req, res) => {
 
   const filePath = path.join(__dirname, FILES_DIRECTORY, fileName);
 
+  await fs.mkdir(FILES_DIRECTORY, { recursive: true });
   await fs.writeFile(filePath, Buffer.from(buffer));
   res.sendFile(filePath);
 });

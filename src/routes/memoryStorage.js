@@ -20,6 +20,7 @@ router.post("/", upload.single(FILE_FIELD_NAME), (req, res) => {
 router.post("/toDisk", upload.single(FILE_FIELD_NAME), async (req, res) => {
   const { file } = req;
   const filePath = path.join(__dirname, FILES_DIRECTORY, file.originalname);
+  await fs.mkdir(FILES_DIRECTORY, { recursive: true });
   await fs.writeFile(filePath, file.buffer);
   res.sendFile(filePath);
 });
