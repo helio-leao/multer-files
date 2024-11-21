@@ -8,6 +8,8 @@ import path from "path";
 const app = express();
 app.use(express.json());
 
+await fs.mkdir(FILES_DIRECTORY, { recursive: true });
+
 app.use("/disk", diskStorageRouter);
 app.use("/memo", memoryStorageRouter);
 
