@@ -36,8 +36,7 @@ router.post("/fromBase64", async (req, res) => {
 router.post("/fromUrl", async (req, res) => {
   const { url } = req.body;
 
-  const response = await fetch(url);
-  const buffer = await response.arrayBuffer();
+  const buffer = await (await fetch(url)).arrayBuffer();
 
   const parsedUrl = new URL(url);
   let fileName = path.basename(parsedUrl.pathname) || "downloaded_file";
