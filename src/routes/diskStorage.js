@@ -38,9 +38,6 @@ router.post("/fromUrl", async (req, res) => {
 
   const arrayBuffer = await (await fetch(url)).arrayBuffer();
 
-  // const blob = await (await fetch(url)).blob();
-  // const arrayBuffer = await blob.arrayBuffer();
-
   const parsedUrl = new URL(url);
   let fileName = path.basename(parsedUrl.pathname) || "downloaded_file";
   fileName = fileName.split("?")[0];
