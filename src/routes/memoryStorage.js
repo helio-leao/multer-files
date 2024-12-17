@@ -14,7 +14,14 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 router.post("/", upload.single(FILE_FIELD_NAME), (req, res) => {
-  res.json(req.file);
+  res.setHeader("Content-Type", req.file.mimetype);
+  res.setHeader("Content-Length", req.file.size);
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename="${req.file.originalname}"`
+  );
+  res.send(req.file.buffer);
+  // res.json(req.file);
 });
 
 router.post("/toDisk", upload.single(FILE_FIELD_NAME), async (req, res) => {
