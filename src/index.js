@@ -5,6 +5,8 @@ import memoryStorageRouter from "./routes/memoryStorage.js";
 import fs from "fs/promises";
 import { FILES_DIRECTORY } from "./constants/fileConstants.js";
 
+const PORT = process.env.PORT || 3000;
+
 const app = express();
 app.use(express.json());
 
@@ -14,4 +16,4 @@ app.use("/", indexRouter);
 app.use("/disk", diskStorageRouter);
 app.use("/memo", memoryStorageRouter);
 
-app.listen(3000, () => console.log("Server running..."));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}...`));
