@@ -7,7 +7,6 @@ import {
   FILES_DIRECTORY,
 } from "../constants/fileConstants.js";
 
-const __dirname = path.resolve();
 const router = Router();
 
 const storage = multer.memoryStorage();
@@ -26,7 +25,7 @@ router.post("/", upload.single(FILE_FIELD_NAME), (req, res) => {
 
 router.post("/toDisk", upload.single(FILE_FIELD_NAME), async (req, res) => {
   const { file } = req;
-  const filePath = path.join(__dirname, FILES_DIRECTORY, file.originalname);
+  const filePath = path.resolve(FILES_DIRECTORY, file.originalname);
   await fs.writeFile(filePath, file.buffer);
   res.sendFile(filePath);
 });
